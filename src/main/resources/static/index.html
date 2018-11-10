@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <style type="text/css">
+        .lightbox{
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            height: 100%;
+            width: 100%;
+            z-index: 7;
+            opacity: 0.3;
+            display: block;
+            background-color: rgb(0, 0, 0);
+        }
+        .pop{
+            position: absolute;
+            left: 50%;
+            width: 894px;
+            margin-left: -447px;
+            z-index: 9;
+        }
+    </style>
+    <script type="text/javascript" src="pdf/build/pdf.js"></script>
+    <script type="text/javascript">
+        function showPdf() {
+            var container = document.getElementById("container");
+            container.style.display = "block";
+            var url = 'http://localhost:8080/v1/word/display/upload/projectmanager/04e484f3-189d-4541-a70c-3d05563d4ed5.pdf';
+            PDFJS.workerSrc = 'pdf/build/pdf.worker.js';
+            PDFJS.getDocument(url).then(function getPdfHelloWorld(pdf) {
+                pdf.getPage(1).then(function getPageHelloWorld(page) {
+                    var scale = 1;
+                    var viewport = page.getViewport(scale);
+                    var canvas = document.getElementById('the-canvas');
+                    var context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    var renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    page.render(renderContext);
+                });
+            });
+        }
+    </script>
+</head>
+<body>
+<h2>文件上传示例</h2>
+<hr/>
+<form method="POST" enctype="multipart/form-data" action="uploadfile/upload">
+    <p>
+        文件：<input type="file" name="files" />
+    </p>
+    <p>
+        <input type="submit" value="上传" />
+    </p>
+</form>
+<h1>
+    <a href="javascript:void(0)" target="_blank" onclick="showPdf()">显示pdf文档</a>
+</h1>
+<div id="container" style="display: none;">
+    <div class="lightbox"></div>
+    <div id="pop" class="pop">
+        <canvas id="the-canvas"></canvas>
+    </div>
+</div>
+<!--pdf/web/viewer.html?file=http://localhost:8080/v1/word/display/upload/projectmanager/04e484f3-189d-4541-a70c-3d05563d4ed5.pdf-->
+<!--<div style="width: 50%; height: 100%">-->
+    <!--<a href="pdf/web/viewer.html?file=http://localhost:8080/v1/word/display/upload/projectmanager/04e484f3-189d-4541-a70c-3d05563d4ed5.pdf"-->
+       <!--target="_blank" >显示pdf文档</a>-->
+<!--</div>-->
+</body>
+</html>
